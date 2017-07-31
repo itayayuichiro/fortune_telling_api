@@ -32,8 +32,10 @@ $table_tag3 = $phpQueryObj3['#re_main img'];
 
 
 $json_array = array(
-    'name' => 'yahoo占い',
-    'ranking' => $ranking
+	'result' => [
+		array('name' => 'yahoo占い','ranking' => $ranking),
+		array('name' => 'i無料占い','ranking' => $ranking2)
+		]
 );
 # ↑ JSON 形式にする
  
