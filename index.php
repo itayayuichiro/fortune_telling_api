@@ -7,6 +7,7 @@ $HTMLData = file_get_contents('https://fortune.yahoo.co.jp/12astro/scorpio');
 $phpQueryObj = phpQuery::newDocumentHTML($HTMLData);
 $ranking = $phpQueryObj['#jumpdtl strong'];
 $ranking = mb_convert_encoding($ranking, 'UTF-8', 'CP51932');
+$ranking = preg_replace('/<strong>|<\/strong>| さそり座|位/', "", $ranking);
 $table_tag = $phpQueryObj['#jumpdtl img'];
 
 /*i無料占い*/
@@ -14,6 +15,7 @@ $HTMLData2 = file_get_contents('http://uranaitv.jp/rank_fortune/scorpio');
 $phpQueryObj2 = phpQuery::newDocumentHTML($HTMLData2);
 $ranking2 = $phpQueryObj2["meta[property='og:description']"];
 $ranking2 = explode("……", pq($ranking2)[0]->attr('content'))[1];
+$ranking2 = preg_replace('/位/', "", $ranking2);
 $table_tag2 = $phpQueryObj2['#rankAll span'];
 
 
@@ -24,6 +26,7 @@ $h2_tag = $phpQueryObj3["h2"];
 foreach($h2_tag as $val) {
 	if (strpos(pq($val)->text(),'位')) {
 		$ranking3 = explode("さそり座 ", pq($val)->text())[1];
+		$ranking3 = preg_replace('/位/', "", $ranking3);
 	}
 }
 
@@ -34,7 +37,8 @@ $table_tag3 = $phpQueryObj3['#re_main img'];
 $json_array = array(
 	'result' => [
 		array('name' => 'yahoo占い','ranking' => $ranking),
-		array('name' => 'i無料占い','ranking' => $ranking2)
+		array('name' => 'i無料占い','ranking' => $ranking2),
+		array('name' => 'i無料占い','ranking' => $ranking3)
 		]
 );
 # ↑ JSON 形式にする
